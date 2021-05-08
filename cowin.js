@@ -5,7 +5,10 @@ const pingCowin = async ({ districtId, ageValue, date }) => {
   try {
     const transformedDate = transformDate(date);
     const { data } = await axios.get(
-      `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${transformedDate}`
+      `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${transformedDate}`,
+      {
+        headers: { 'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" }
+      }
     );
     const { centers } = data;
     let isSlotAvailable = false;
@@ -34,6 +37,7 @@ const pingCowin = async ({ districtId, ageValue, date }) => {
     return { centers: updatedCenters, appointmentsAvailableCount, nearestAppoinmentDate };
   } catch (error) {
     console.log("Error: " + error.message);
+    return Promise.reject(error);
   }
 };
 
