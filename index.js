@@ -6,13 +6,13 @@ const { getNextDate } = require("./dateutils");
 let opened = false;
 
 const districtId = 304;
-const ageValue = 55;
+const age = 55;
 
 const checkForVaccines = async () => {
   const today = new Date();
   const data = await pingCowin({
     districtId,
-    ageValue,
+    age,
     date: getNextDate(today),
   });
   let dateCount = 2;
@@ -25,7 +25,7 @@ const checkForVaccines = async () => {
       nearestAppoinmentDate,
     } = await pingCowin({
       districtId,
-      ageValue,
+      age,
       date: nextDate,
     });
     totalAppoinmentsAvailable += appointmentsAvailableCount;

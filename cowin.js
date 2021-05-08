@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { transformDate } = require("./dateutils");
 
-const pingCowin = async ({ districtId, ageValue, date }) => {
+const pingCowin = async ({ districtId, age, date }) => {
   try {
     const transformedDate = transformDate(date);
     const { data } = await axios.get(
@@ -20,7 +20,7 @@ const pingCowin = async ({ districtId, ageValue, date }) => {
         isSlotAvailable = false;
         center.sessions.forEach((session) => {
           if (
-            session.min_age_limit < +ageValue &&
+            session.min_age_limit < +age &&
             session.available_capacity > 0
           ) {
             isSlotAvailable = true;
