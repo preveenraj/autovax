@@ -48,7 +48,7 @@ const checkForVaccines = async () => {
     });
   }
 };
-const intervalInMs = 1000;
+const intervalInMs = 5000;
 let pingCount = 0;
 checkForVaccines();
 
