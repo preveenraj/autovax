@@ -1,9 +1,9 @@
-const http = require("http"),
-  open = require("open");
-let server;
 const { pingCowin } = require("./cowin");
 const { getNextDate } = require("./dateutils");
+const { sendTelegram } = require('./telegram');
+const { openBrowser } = require('./browser');
 let opened = false;
+let includeTelegram = false;
 
 const districtId = 304;
 const age = 55;
@@ -38,21 +38,17 @@ const checkForVaccines = async () => {
   console.log("appoinmentDates ", appoinmentDates);
   if (totalAppoinmentsAvailable && !opened) {
     opened = true;
-    server = http.createServer(function (req, res) {
-      res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end("Hello World\n");
-    });
-    server.listen(1337, "127.0.0.1", function () {
-      console.log("Launching the browser!");
-      open("https://selfregistration.cowin.gov.in/");
-    });
+    if (includeTelegram) sendTelegram(`There are ${totalAppoinmentsAvailable} for Kottayam now.`);
+    openBrowser();
+  } else {
+    if (includeTelegram) sendTelegram(`Oops, there are no slots for Kottayam.`);
   }
 };
 const intervalInMs = 5000;
 let pingCount = 0;
 checkForVaccines();
 
-var timer = setInterval(() => {
+setInterval(() => {
   console.clear();
   pingCount+= 1;
   checkForVaccines();

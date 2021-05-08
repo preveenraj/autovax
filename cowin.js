@@ -7,11 +7,12 @@ const pingCowin = async ({ districtId, age, date }) => {
     const { data } = await axios.get(
       `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${transformedDate}`,
       {
-        headers: { 'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" }
+        headers: {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"}
       }
     );
     const { centers } = data;
     let isSlotAvailable = false;
+    let dataOfSlot = "";
     let updatedCenters = [];
     let appointmentsAvailableCount = 0;
     let nearestAppoinmentDate = null;
@@ -25,6 +26,7 @@ const pingCowin = async ({ districtId, age, date }) => {
           ) {
             isSlotAvailable = true;
             appointmentsAvailableCount++;
+            dataOfSlot = `${dataOfSlot}\nSlot for ${session.available_capacity} is available: ${center.name} on ${session.date}`;
             if(!nearestAppoinmentDate) {
               nearestAppoinmentDate = transformedDate;
             }
