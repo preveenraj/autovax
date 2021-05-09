@@ -55,5 +55,8 @@ setInterval(() => {
   console.clear();
   pingCount+= 1;
   checkForVaccines();
+  if (pingCount % 10 == 0 ) {
+    opened =false;
+  }
   console.log("Ping Count - ", pingCount);
 }, intervalInMs);
