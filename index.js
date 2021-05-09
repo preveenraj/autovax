@@ -1,9 +1,16 @@
+const dotenv = require('dotenv');
+
 const { pingCowin } = require("./cowin");
 const { getNextDate } = require("./dateutils");
 const { sendTelegram } = require('./telegram');
 const { openBrowser } = require('./browser');
+
+dotenv.config();
+let includeTelegram = !!+process.env.includeTelegram;
+const shouldOpenBrowser = !!+process.env.shouldOpenBrowser;
+
 let opened = false;
-let includeTelegram = false;
+let everyAppoinmentsAvailable = 0;
 
 const districtId = 304;
 const age = 55;
@@ -13,21 +20,26 @@ const checkForVaccines = async () => {
   const data = await pingCowin({
     districtId,
     age,
-    date: getNextDate(today),
+    date: today,
   });
   let dateCount = 2;
   let nextDate = getNextDate(today);
-  let totalAppoinmentsAvailable = data.appointmentsAvailableCount;
-  let appoinmentDates = [data.nearestAppoinmentDate];
+  let totalAppoinmentsAvailable = data?.appointmentsAvailableCount;
+  let totalDataSlots = data?.dataOfSlot;
+  let appoinmentDates = [data?.nearestAppoinmentDate];
   while (dateCount++ <= 7) {
     const {
       appointmentsAvailableCount,
       nearestAppoinmentDate,
+      dataOfSlot
     } = await pingCowin({
       districtId,
       age,
       date: nextDate,
     });
+    if (dataOfSlot.length) {
+      totalDataSlots = `${totalDataSlots}\n${dataOfSlot}`;
+    }
     totalAppoinmentsAvailable += appointmentsAvailableCount;
     if (nearestAppoinmentDate) {
       appoinmentDates.push(nearestAppoinmentDate);
@@ -36,21 +48,28 @@ const checkForVaccines = async () => {
   }
   console.log("totalAppoinmentsAvailable ", totalAppoinmentsAvailable);
   console.log("appoinmentDates ", appoinmentDates);
-  if (totalAppoinmentsAvailable && !opened) {
-    opened = true;
-    if (includeTelegram) sendTelegram(`There are ${totalAppoinmentsAvailable} for Kottayam now.`);
-    openBrowser();
+ if (!opened) {
+   opened = true;
+  if (totalAppoinmentsAvailable) {
+    if (includeTelegram) sendTelegram(`There are ${totalAppoinmentsAvailable} appoinments for Kottayam now.\n ${totalDataSlots} \n\n Register your vaccine now => https://selfregistration.cowin.gov.in/`);
+    if (shouldOpenBrowser) openBrowser();
   } else {
-    if (includeTelegram) sendTelegram(`Oops, there are no slots for Kottayam.`);
+    if (includeTelegram) sendTelegram(`Oops, there are no slots for Kottayam now.`);
   }
+ }
+  return totalAppoinmentsAvailable;
 };
-const intervalInMs = 5000;
+const intervalInMs = 60000;
 let pingCount = 0;
 checkForVaccines();
 
-setInterval(() => {
+setInterval(async () => {
   console.clear();
   pingCount+= 1;
-  checkForVaccines();
+  const currentAppoinments = await checkForVaccines();
+  if (currentAppoinments !== everyAppoinmentsAvailable) {
+    opened =false;
+  }
+  everyAppoinmentsAvailable = currentAppoinments;
   console.log("Ping Count - ", pingCount);
 }, intervalInMs);

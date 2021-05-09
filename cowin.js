@@ -21,12 +21,11 @@ const pingCowin = async ({ districtId, age, date }) => {
         isSlotAvailable = false;
         center.sessions.forEach((session) => {
           if (
-            session.min_age_limit < +age &&
             session.available_capacity > 0
           ) {
             isSlotAvailable = true;
             appointmentsAvailableCount++;
-            dataOfSlot = `${dataOfSlot}\nSlot for ${session.available_capacity} is available: ${center.name} on ${session.date}`;
+            dataOfSlot = `${dataOfSlot}\nSlot for ${session.available_capacity} people (${session.min_age_limit} years+ ) is available: ${center.name} on ${session.date}`;
             if(!nearestAppoinmentDate) {
               nearestAppoinmentDate = transformedDate;
             }
@@ -36,7 +35,7 @@ const pingCowin = async ({ districtId, age, date }) => {
       });
     }
 
-    return { centers: updatedCenters, appointmentsAvailableCount, nearestAppoinmentDate };
+    return { centers: updatedCenters, appointmentsAvailableCount, nearestAppoinmentDate, dataOfSlot };
   } catch (error) {
     console.log("Error: " + error.message);
     return Promise.reject(error);
