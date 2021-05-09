@@ -1,9 +1,15 @@
+const dotenv = require('dotenv');
+
 const { pingCowin } = require("./cowin");
 const { getNextDate } = require("./dateutils");
 const { sendTelegram } = require('./telegram');
 const { openBrowser } = require('./browser');
+
+dotenv.config();
+let includeTelegram = !!+process.env.includeTelegram;
+const shouldOpenBrowser = !!+process.env.shouldOpenBrowser;
+
 let opened = false;
-let includeTelegram = true;
 let everyAppoinmentsAvailable = 0;
 
 const districtId = 304;
@@ -46,7 +52,7 @@ const checkForVaccines = async () => {
    opened = true;
   if (totalAppoinmentsAvailable) {
     if (includeTelegram) sendTelegram(`There are ${totalAppoinmentsAvailable} appoinments for Kottayam now.\n ${totalDataSlots} \n\n Register your vaccine now => https://selfregistration.cowin.gov.in/`);
-    // openBrowser();
+    if (shouldOpenBrowser) openBrowser();
   } else {
     if (includeTelegram) sendTelegram(`Oops, there are no slots for Kottayam now.`);
   }

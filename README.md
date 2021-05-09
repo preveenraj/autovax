@@ -9,6 +9,8 @@ An node server that would automatically open the cowin webpage when any vaccinat
 ```
 token=18245****fuE4
 chatId=25******99
+includeTelegram=1 //if this parameter is 0, then no need to give token and chatId
+shouldOpenBrowser=0
 ```
 
 - please edit your districtId and age in the `index.js` file.
