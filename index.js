@@ -59,7 +59,7 @@ setInterval(async () => {
   console.clear();
   pingCount+= 1;
   const currentAppoinments = await checkForVaccines();
-  if (pingCount % 10 === 0 || (currentAppoinments !== everyAppoinmentsAvailable)) {
+  if (currentAppoinments !== everyAppoinmentsAvailable) {
     opened =false;
   }
   everyAppoinmentsAvailable = currentAppoinments;
