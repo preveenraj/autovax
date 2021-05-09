@@ -61,7 +61,7 @@ const checkForVaccines = async () => {
 };
 const intervalInMs = 60000;
 let pingCount = 0;
-checkForVaccines();
+// checkForVaccines();
 
 setInterval(async () => {
   console.clear();
