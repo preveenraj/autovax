@@ -31,7 +31,9 @@ const checkForVaccines = async () => {
       age,
       date: nextDate,
     });
-    totalDataSlots = `${totalDataSlots}\n${dataOfSlot}`;
+    if (dataOfSlot.length) {
+      totalDataSlots = `${totalDataSlots}\n${dataOfSlot}`;
+    }
     totalAppoinmentsAvailable += appointmentsAvailableCount;
     if (nearestAppoinmentDate) {
       appoinmentDates.push(nearestAppoinmentDate);
