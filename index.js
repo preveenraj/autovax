@@ -4,6 +4,7 @@ const { sendTelegram } = require('./telegram');
 const { openBrowser } = require('./browser');
 let opened = false;
 let includeTelegram = true;
+let everyAppoinmentsAvailable = 0;
 
 const districtId = 304;
 const age = 55;
@@ -39,24 +40,28 @@ const checkForVaccines = async () => {
   }
   console.log("totalAppoinmentsAvailable ", totalAppoinmentsAvailable);
   console.log("appoinmentDates ", appoinmentDates);
-  if (totalAppoinmentsAvailable && !opened) {
-    opened = true;
+ if (!opened) {
+   opened = true;
+  if (totalAppoinmentsAvailable) {
     if (includeTelegram) sendTelegram(`There are ${totalAppoinmentsAvailable} appoinments for Kottayam now.\n ${totalDataSlots}`);
     // openBrowser();
   } else {
-    // if (includeTelegram) sendTelegram(`Oops, there are no slots for Kottayam.`);
+    if (includeTelegram) sendTelegram(`Oops, there are no slots for Kottayam now.`);
   }
+ }
+  return totalAppoinmentsAvailable;
 };
 const intervalInMs = 60000;
 let pingCount = 0;
 checkForVaccines();
 
-setInterval(() => {
+setInterval(async () => {
   console.clear();
   pingCount+= 1;
-  checkForVaccines();
-  if (pingCount % 10 == 0 ) {
+  const currentAppoinments = await checkForVaccines();
+  if (pingCount % 10 === 0 || (currentAppoinments !== everyAppoinmentsAvailable)) {
     opened =false;
   }
+  everyAppoinmentsAvailable = currentAppoinments;
   console.log("Ping Count - ", pingCount);
 }, intervalInMs);
