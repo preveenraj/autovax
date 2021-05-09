@@ -43,7 +43,7 @@ const checkForVaccines = async () => {
  if (!opened) {
    opened = true;
   if (totalAppoinmentsAvailable) {
-    if (includeTelegram) sendTelegram(`There are ${totalAppoinmentsAvailable} appoinments for Kottayam now.\n ${totalDataSlots}`);
+    if (includeTelegram) sendTelegram(`There are ${totalAppoinmentsAvailable} appoinments for Kottayam now.\n ${totalDataSlots} \n\n Register your vaccine now => https://selfregistration.cowin.gov.in/`);
     // openBrowser();
   } else {
     if (includeTelegram) sendTelegram(`Oops, there are no slots for Kottayam now.`);
