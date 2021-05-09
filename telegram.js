@@ -1,12 +1,16 @@
 const axios = require("axios");
+const dotenv = require('dotenv');
+dotenv.config();
+const token = process.env.token;
+const chatId = process.env.chatId;
 
 const sendTelegram = async (message) => {
  try {
   await axios.post(
-    `https://api.telegram.org/bot1824586313:AAEyLhsaMf3vD-Sns6Jrab-gTj-AgR-fuE4/sendMessage`,
+    `https://api.telegram.org/bot${token}/sendMessage`,
       {
         "text": message,
-        "chat_id": "-1001490910260"
+        "chat_id": chatId
       }
   );
  } catch (error) {
