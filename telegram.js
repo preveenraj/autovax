@@ -9,8 +9,9 @@ const sendTelegram = async (message) => {
   await axios.post(
     `https://api.telegram.org/bot${token}/sendMessage`,
       {
-        "text": message,
-        "chat_id": chatId
+        text: message,
+        chat_id: chatId,
+        parse_mode: "HTML"
       }
   );
  } catch (error) {
