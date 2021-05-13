@@ -12,7 +12,8 @@ const shouldOpenBrowser = !!+process.env.shouldOpenBrowser;
 let opened = false;
 let everyAppoinmentsAvailable = 0;
 
-const districtId = 304;
+const districtId = +process.env.districtId;
+console.log("🚀 ~ file: index.js ~ line 16 ~ districtId", districtId)
 const age = 55;
 
 const checkForVaccines = async () => {
@@ -67,7 +68,7 @@ const checkForVaccines = async () => {
 };
 const intervalInMs = 60000;
 let pingCount = 0;
-// checkForVaccines();
+checkForVaccines();
 
 setInterval(async () => {
   console.clear();
