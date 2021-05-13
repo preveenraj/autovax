@@ -2,10 +2,12 @@ const axios = require("axios");
 const dotenv = require('dotenv');
 dotenv.config();
 const token = process.env.token;
-const chatId = process.env.chatId;
+let chatId;
+const districtId = +process.env.districtId;
 
 const sendTelegram = async (message) => {
  try {
+  chatId = process.env?.[`chatId_${districtId}`] || process.env.chatId_test;
   await axios.post(
     `https://api.telegram.org/bot${token}/sendMessage`,
       {

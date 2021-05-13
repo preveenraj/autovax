@@ -14,6 +14,7 @@ let everyAppoinmentsAvailable = 0;
 
 const districtId = +process.env.districtId;
 console.log("🚀 ~ file: index.js ~ line 16 ~ districtId", districtId)
+
 const age = 55;
 
 const checkForVaccines = async () => {
