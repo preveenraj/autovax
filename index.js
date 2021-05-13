@@ -62,7 +62,7 @@ const checkForVaccines = async () => {
 
     if (shouldOpenBrowser) openBrowser();
   } else {
-    if (includeTelegram) sendTelegram(`There are *NO* slots available!`);
+    if (includeTelegram) sendTelegram(`There are <b>NO</b> slots available!`);
   }
  }
   return totalAppoinmentsAvailable;
