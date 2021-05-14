@@ -1,5 +1,6 @@
 const axios = require("axios");
 const { transformDate } = require("./dateutils");
+const { format, parse } = require("fecha");
 
 const pingCowin = async ({ districtId, age, date }) => {
   try {
@@ -10,22 +11,31 @@ const pingCowin = async ({ districtId, age, date }) => {
         headers: {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"}
       }
     );
+    // const data = require("./centers.json");
     const { centers } = data;
     let isSlotAvailable = false;
     let dataOfSlot = "";
     let updatedCenters = [];
     let appointmentsAvailableCount = 0;
     let nearestAppoinmentDate = null;
+
     if (centers.length) {
       updatedCenters = centers.filter((center) => {
         isSlotAvailable = false;
         center.sessions.forEach((session) => {
+          const sessionDateFormatted = format(parse(session.date, "DD-MM-YYYY"), "MMM D, YYYY");
           if (
             session.available_capacity > 0
           ) {
             isSlotAvailable = true;
             appointmentsAvailableCount++;
-            dataOfSlot = `${dataOfSlot}\n Slot for ${session.available_capacity} people (${session.min_age_limit} years+ ) is available:\n <b>${center.name}</b> on ${session.date}\n ----------------------------------------------------------`;
+            const personLabel = session.available_capacity > 1 ? "people" : "person";
+            dataOfSlot = `
+            ${dataOfSlot}
+            <b>${center.name}</b> on ${sessionDateFormatted}
+            (<b>${session.min_age_limit}</b> years+ )
+            Appointments available: ${session.available_capacity} ${personLabel}
+            ----------------------------------------------------------`;
             if(!nearestAppoinmentDate) {
               nearestAppoinmentDate = transformedDate;
             }

@@ -53,12 +53,12 @@ const checkForVaccines = async () => {
  if (!opened) {
    opened = true;
   if (totalAppointmentsAvailable) {
+    const verbLabel = totalAppointmentsAvailable > 1 ? "are" : "is only";
     if (includeTelegram) sendTelegram(`
-    <b><u>Vaccine Alert</u></b>
-    \n There are <b>${totalAppointmentsAvailable}</b> appointments.
-    \n ${totalDataSlots} 
-    \n\n
-     <b>Register your vaccine now</b> => https://selfregistration.cowin.gov.in/`);
+    <b><u>Vaccine Alert</u></b>\n
+    There ${verbLabel} <b>${totalAppointmentsAvailable}</b> appointment${totalAppointmentsAvailable > 1 ? "s" : ""} available.
+    ${totalDataSlots}\n
+     <b>Register your vaccine now </b> =>  https://selfregistration.cowin.gov.in/`);
 
     if (shouldOpenBrowser) openBrowser();
   } else {

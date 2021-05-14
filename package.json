@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "dotenv": "^9.0.1",
+    "fecha": "^4.2.1",
     "open": "^8.0.7"
   }
 }
