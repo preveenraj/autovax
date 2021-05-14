@@ -23,14 +23,14 @@ const pingCowin = async ({ districtId, age, date }) => {
       updatedCenters = centers.filter((center) => {
         isSlotAvailable = false;
         center.sessions.forEach((session) => {
-          const sessionDateFormatted = format(parse(session.date, "DD-MM-YYYY"), "MMM D, YYYY");
+          const sessionDateFormatted = format(parse(session.date, "DD-MM-YYYY"), "MMM D");
           if (
             session.available_capacity > 0
           ) {
             isSlotAvailable = true;
             appointmentsAvailableCount++;
             const personLabel = session.available_capacity > 1 ? "people" : "person";
-            dataOfSlot = `${dataOfSlot}\n<b>${center.name}</b> on ${sessionDateFormatted}\n(<b>${session.min_age_limit}</b> years+ )\nAppointments available: ${session.available_capacity} ${personLabel}\n----------------------------------------------------------`;
+            dataOfSlot = `${dataOfSlot}\n<b>${center.name}</b> on <u>${sessionDateFormatted}</u>\n(<b>${session.min_age_limit}</b> years+ )\nAppointments available: ${session.available_capacity} ${personLabel}\n----------------------------------------------------------`;
             if(!nearestAppoinmentDate) {
               nearestAppoinmentDate = transformedDate;
             }
