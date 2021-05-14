@@ -30,12 +30,7 @@ const pingCowin = async ({ districtId, age, date }) => {
             isSlotAvailable = true;
             appointmentsAvailableCount++;
             const personLabel = session.available_capacity > 1 ? "people" : "person";
-            dataOfSlot = `
-            ${dataOfSlot}
-            <b>${center.name}</b> on ${sessionDateFormatted}
-            (<b>${session.min_age_limit}</b> years+ )
-            Appointments available: ${session.available_capacity} ${personLabel}
-            ----------------------------------------------------------`;
+            dataOfSlot = `${dataOfSlot}\n<b>${center.name}</b> on ${sessionDateFormatted}\n(<b>${session.min_age_limit}</b> years+ )\nAppointments available: ${session.available_capacity} ${personLabel}\n----------------------------------------------------------`;
             if(!nearestAppoinmentDate) {
               nearestAppoinmentDate = transformedDate;
             }
