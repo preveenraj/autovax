@@ -55,7 +55,7 @@ const checkForVaccines = async () => {
   if (totalAppointmentsAvailable) {
     const verbLabel = totalAppointmentsAvailable > 1 ? "are" : "is only";
     if (includeTelegram) sendTelegram(`
-    <b><u>Vaccine Alert</u></b>\n\nThere ${verbLabel} <b>${totalAppointmentsAvailable}</b> appointment${totalAppointmentsAvailable > 1 ? "s" : ""} available.
+    <b><u>Vaccine Alert</u></b>\n\nThere ${verbLabel} <b>${totalAppointmentsAvailable}</b> slot${totalAppointmentsAvailable > 1 ? "s" : ""} available.
     ${totalDataSlots}\n
      <b>Register your vaccine now </b> =>  https://selfregistration.cowin.gov.in/`);
 
