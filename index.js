@@ -5,6 +5,10 @@ const { getNextDate } = require("./dateutils");
 const { sendTelegram } = require('./telegram');
 const { openBrowser } = require('./browser');
 
+const sleep = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
 dotenv.config();
 let includeTelegram = !!+process.env.includeTelegram;
 const shouldOpenBrowser = !!+process.env.shouldOpenBrowser;
@@ -30,6 +34,7 @@ const checkForVaccines = async () => {
   let totalDataSlots = data?.dataOfSlot;
   let appoinmentDates = [data?.nearestAppoinmentDate];
   while (dateCount++ <= 7) {
+  await sleep(1000);
     const {
       appointmentsAvailableCount,
       nearestAppoinmentDate,
