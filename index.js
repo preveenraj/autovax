@@ -22,54 +22,59 @@ console.log("🚀 ~ file: index.js ~ line 16 ~ districtId", districtId)
 const age = 55;
 
 const checkForVaccines = async () => {
-  const today = new Date();
-  const data = await pingCowin({
-    districtId,
-    age,
-    date: today,
-  });
-  let dateCount = 2;
-  let nextDate = getNextDate(today);
-  let totalAppointmentsAvailable = data?.appointmentsAvailableCount;
-  let totalDataSlots = data?.dataOfSlot;
-  let appoinmentDates = [data?.nearestAppoinmentDate];
-  while (dateCount++ <= 7) {
-  await sleep(1000);
-    const {
-      appointmentsAvailableCount,
-      nearestAppoinmentDate,
-      dataOfSlot
-    } = await pingCowin({
+  try {
+    const today = new Date();
+    const data = await pingCowin({
       districtId,
       age,
-      date: nextDate,
+      date: today,
     });
-    if (dataOfSlot.length) {
-      totalDataSlots = `${totalDataSlots}\n${dataOfSlot}`;
+    let dateCount = 2;
+    let nextDate = getNextDate(today);
+    let totalAppointmentsAvailable = data?.appointmentsAvailableCount;
+    let totalDataSlots = data?.dataOfSlot;
+    let appoinmentDates = [data?.nearestAppoinmentDate];
+    while (dateCount++ <= 7) {
+    await sleep(1000);
+      const {
+        appointmentsAvailableCount,
+        nearestAppoinmentDate,
+        dataOfSlot
+      } = await pingCowin({
+        districtId,
+        age,
+        date: nextDate,
+      });
+      if (dataOfSlot.length) {
+        totalDataSlots = `${totalDataSlots}\n${dataOfSlot}`;
+      }
+      totalAppointmentsAvailable += appointmentsAvailableCount;
+      if (nearestAppoinmentDate) {
+        appoinmentDates.push(nearestAppoinmentDate);
+      }
+      nextDate = getNextDate(nextDate);
     }
-    totalAppointmentsAvailable += appointmentsAvailableCount;
-    if (nearestAppoinmentDate) {
-      appoinmentDates.push(nearestAppoinmentDate);
+    console.log("totalAppointmentsAvailable ", totalAppointmentsAvailable);
+    console.log("appoinmentDates ", appoinmentDates);
+   if (!opened) {
+     opened = true;
+    if (totalAppointmentsAvailable) {
+      const verbLabel = totalAppointmentsAvailable > 1 ? "are" : "is only";
+      if (includeTelegram) sendTelegram(`
+      <b><u>Vaccine Alert</u></b>\n\nThere ${verbLabel} <b>${totalAppointmentsAvailable}</b> slot${totalAppointmentsAvailable > 1 ? "s" : ""} available.
+      ${totalDataSlots}\n
+       <b>Register your vaccine now </b> =>  https://selfregistration.cowin.gov.in/`);
+  
+      if (shouldOpenBrowser) openBrowser();
+    } else {
+      if (includeTelegram) sendTelegram(`There are <b>NO</b> slots available!`);
     }
-    nextDate = getNextDate(nextDate);
+   }
+    return totalAppointmentsAvailable;
+    
+  } catch (error) {
+    return 0;
   }
-  console.log("totalAppointmentsAvailable ", totalAppointmentsAvailable);
-  console.log("appoinmentDates ", appoinmentDates);
- if (!opened) {
-   opened = true;
-  if (totalAppointmentsAvailable) {
-    const verbLabel = totalAppointmentsAvailable > 1 ? "are" : "is only";
-    if (includeTelegram) sendTelegram(`
-    <b><u>Vaccine Alert</u></b>\n\nThere ${verbLabel} <b>${totalAppointmentsAvailable}</b> slot${totalAppointmentsAvailable > 1 ? "s" : ""} available.
-    ${totalDataSlots}\n
-     <b>Register your vaccine now </b> =>  https://selfregistration.cowin.gov.in/`);
-
-    if (shouldOpenBrowser) openBrowser();
-  } else {
-    if (includeTelegram) sendTelegram(`There are <b>NO</b> slots available!`);
-  }
- }
-  return totalAppointmentsAvailable;
 };
 const intervalInMs = 60000;
 let pingCount = 0;
@@ -79,7 +84,9 @@ setInterval(async () => {
   console.clear();
   pingCount+= 1;
   const currentAppointments = await checkForVaccines();
-  if (currentAppointments !== everyAppointmentsAvailable) {
+  if (currentAppointments === 0) {
+    opened = true;
+  } else if (currentAppointments !== everyAppointmentsAvailable) {
     opened =false;
   }
   everyAppointmentsAvailable = currentAppointments;
