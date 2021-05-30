@@ -34,12 +34,16 @@ const checkForVaccines = async () => {
     let totalAppointmentsAvailable = data?.appointmentsAvailableCount;
     let totalDataSlots = data?.dataOfSlot;
     let appoinmentDates = [data?.nearestAppoinmentDate];
+    let totalSlotsfor18plus = data?.slotsfor18plus;
+    let totalSlotsfor45plus = data?.slotsfor45plus;
     while (dateCount++ <= 7) {
     await sleep(1000);
       const {
         appointmentsAvailableCount,
         nearestAppoinmentDate,
-        dataOfSlot
+        dataOfSlot,
+        slotsfor18plus,
+        slotsfor45plus
       } = await pingCowin({
         districtId,
         age,
@@ -49,6 +53,8 @@ const checkForVaccines = async () => {
         totalDataSlots = `${totalDataSlots}\n${dataOfSlot}`;
       }
       totalAppointmentsAvailable += appointmentsAvailableCount;
+      totalSlotsfor18plus += slotsfor18plus;
+      totalSlotsfor45plus += slotsfor45plus;
       if (nearestAppoinmentDate) {
         appoinmentDates.push(nearestAppoinmentDate);
       }
@@ -62,6 +68,9 @@ const checkForVaccines = async () => {
       const verbLabel = totalAppointmentsAvailable > 1 ? "are" : "is only";
       if (includeTelegram) sendTelegram(`
       <b><u>Vaccine Alert</u></b>\n\nThere ${verbLabel} <b>${totalAppointmentsAvailable}</b> slot${totalAppointmentsAvailable > 1 ? "s" : ""} available.
+      
+      18+ Slots: <b>${totalSlotsfor18plus}</b>
+      45+ Slots: <b>${totalSlotsfor45plus}</b>
       ${totalDataSlots}\n
        <b>Register your vaccine now </b> =>  https://selfregistration.cowin.gov.in/`);
   
