@@ -18,6 +18,8 @@ let everyAppointmentsAvailable = 0;
 
 const districtId = +process.env.districtId;
 console.log("🚀 ~ file: index.js ~ line 16 ~ districtId", districtId)
+const pincode = +process.env.pincode;
+console.log("🚀 ~ file: index.js ~ line 21 ~ pincode", pincode)
 
 const age = 55;
 
@@ -26,6 +28,7 @@ const checkForVaccines = async () => {
     const today = new Date();
     const data = await pingCowin({
       districtId,
+      pincode,
       age,
       date: today,
     });
@@ -46,6 +49,7 @@ const checkForVaccines = async () => {
         slotsfor45plus
       } = await pingCowin({
         districtId,
+        pincode,
         age,
         date: nextDate,
       });

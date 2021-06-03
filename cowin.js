@@ -2,11 +2,17 @@ const axios = require("axios");
 const { transformDate } = require("./dateutils");
 const { format, parse } = require("fecha");
 
-const pingCowin = async ({ districtId, age, date }) => {
+const pingCowin = async ({ districtId, pincode, age, date }) => {
   try {
     const transformedDate = transformDate(date);
+    let url;
+    if(districtId) {
+      url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${transformedDate}`;
+    } else if (pincode) {
+      url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pincode}&date=${transformedDate}`;
+    }
     const { data } = await axios.get(
-      `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${transformedDate}`,
+      url,
       {
         headers: {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"}
       }
