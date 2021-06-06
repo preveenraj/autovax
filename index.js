@@ -16,12 +16,20 @@ const shouldOpenBrowser = !!+process.env.shouldOpenBrowser;
 let opened = false;
 let everyAppointmentsAvailable = 0;
 
-const districtId = +process.env.districtId;
-console.log("🚀 ~ file: index.js ~ line 16 ~ districtId", districtId)
+let districtId = +process.env.districtId;
 const pincode = +process.env.pincode;
 console.log("🚀 ~ file: index.js ~ line 21 ~ pincode", pincode)
+const complexId = process.env.complexId;
+console.log("🚀 ~ file: index.js ~ line 16 ~ complexId", complexId)
 
-const age = 55;
+let age = 70;
+let dose;
+if(complexId) {
+  [districtId, age, dose] = complexId.split("_");
+}
+console.log("🚀 ~ file: index.js ~ line 16 ~ districtId", districtId)
+console.log("🚀 ~ file: index.js ~ line 16 ~ age", age)
+console.log("🚀 ~ file: index.js ~ line 16 ~ dose", dose)
 
 const checkForVaccines = async () => {
   try {
@@ -30,6 +38,7 @@ const checkForVaccines = async () => {
       districtId,
       pincode,
       age,
+      dose,
       date: today,
     });
     let dateCount = 2;
@@ -51,6 +60,7 @@ const checkForVaccines = async () => {
         districtId,
         pincode,
         age,
+        dose,
         date: nextDate,
       });
       if (dataOfSlot.length) {

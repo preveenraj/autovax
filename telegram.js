@@ -3,13 +3,14 @@ const dotenv = require('dotenv');
 dotenv.config();
 const token = process.env.token;
 let chatId;
-const districtId = +process.env.districtId;
+let districtId = +process.env.districtId;
 const pincode = +process.env.pincode;
+const complexId = process.env.complexId;
 
 const sendTelegram = async (message) => {
  try {
    
-  chatId = process.env?.[`chatId_${districtId || pincode}`] || process.env.chatId_test;
+  chatId = process.env?.[`chatId_${districtId || complexId || pincode}`] || process.env.chatId_test;
   await axios.post(
     `https://api.telegram.org/bot${token}/sendMessage`,
       {

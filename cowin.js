@@ -2,7 +2,7 @@ const axios = require("axios");
 const { transformDate } = require("./dateutils");
 const { format, parse } = require("fecha");
 
-const pingCowin = async ({ districtId, pincode, age, date }) => {
+const pingCowin = async ({ districtId, pincode, age, dose, date }) => {
   try {
     const transformedDate = transformDate(date);
     let url;
@@ -42,7 +42,10 @@ const pingCowin = async ({ districtId, pincode, age, date }) => {
       updatedCenters = centers.filter((center) => {
         isSlotAvailable = false;
         center.sessions.forEach((session) => {
-          console.log("🚀 ~ file: cowin.js ~ line 41 ~ updatedCenters=centers.filter ~ center", session.slots)
+          if (dose && ((session.min_age_limit > age) || (session.vaccine === "COVAXIN") || (session.available_capacity_dose1 === 0))) {
+            console.log("skipped");
+            return;
+          }
           const sessionDateFormatted = format(parse(session.date, "DD-MM-YYYY"), "MMM D");
           if (
             session.available_capacity > 0
