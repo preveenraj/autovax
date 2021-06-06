@@ -47,7 +47,7 @@ const checkForVaccines = async () => {
     let totalDataSlots = data?.dataOfSlot;
     let appoinmentDates = [data?.nearestAppoinmentDate];
     let totalSlotsfor18plus = data?.slotsfor18plus;
-    let totalSlotsfor45plus = data?.slotsfor45plus;
+    let totalSlotsfor40plus = data?.slotsfor40plus;
     while (dateCount++ <= 7) {
     await sleep(1000);
       const {
@@ -55,7 +55,7 @@ const checkForVaccines = async () => {
         nearestAppoinmentDate,
         dataOfSlot,
         slotsfor18plus,
-        slotsfor45plus
+        slotsfor40plus
       } = await pingCowin({
         districtId,
         pincode,
@@ -68,7 +68,7 @@ const checkForVaccines = async () => {
       }
       totalAppointmentsAvailable += appointmentsAvailableCount;
       totalSlotsfor18plus += slotsfor18plus;
-      totalSlotsfor45plus += slotsfor45plus;
+      totalSlotsfor40plus += slotsfor40plus;
       if (nearestAppoinmentDate) {
         appoinmentDates.push(nearestAppoinmentDate);
       }
@@ -84,13 +84,17 @@ const checkForVaccines = async () => {
       <b><u>Vaccine Alert</u></b>\n\nThere ${verbLabel} <b>${totalAppointmentsAvailable}</b> slot${totalAppointmentsAvailable > 1 ? "s" : ""} available.
       
       18+ Slots: <b>${totalSlotsfor18plus}</b>
-      45+ Slots: <b>${totalSlotsfor45plus}</b>
+      40+ Slots: <b>${totalSlotsfor40plus}</b>
       ${totalDataSlots}\n
-       <b>Register your vaccine now </b> =>  https://selfregistration.cowin.gov.in/`);
+       <b>Register your vaccine now </b> =>  https://selfregistration.cowin.gov.in/
+       /n`);
   
       if (shouldOpenBrowser) openBrowser();
     } else {
-      if (includeTelegram) sendTelegram(`There are <b>NO</b> slots available!`);
+      if (includeTelegram) 
+      sendTelegram(`
+      There are <b>NO</b> slots available!
+      /n`);
     }
    }
     return totalAppointmentsAvailable;

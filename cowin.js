@@ -25,7 +25,7 @@ const pingCowin = async ({ districtId, pincode, age, dose, date }) => {
     let appointmentsAvailableCount = 0;
     let nearestAppoinmentDate = null;
     let slotsfor18plus = 0;
-    let slotsfor45plus = 0;
+    let slotsfor40plus = 0;
     
 // sample structure of a center
 // {
@@ -60,7 +60,7 @@ const pingCowin = async ({ districtId, pincode, age, dose, date }) => {
             if(session.min_age_limit < 40) {
               slotsfor18plus++;
             } else {
-              slotsfor45plus++;
+              slotsfor40plus++;
             }
           }
         });
@@ -68,7 +68,7 @@ const pingCowin = async ({ districtId, pincode, age, dose, date }) => {
       });
     }
 
-    return { centers: updatedCenters, appointmentsAvailableCount, nearestAppoinmentDate, dataOfSlot, slotsfor18plus, slotsfor45plus };
+    return { centers: updatedCenters, appointmentsAvailableCount, nearestAppoinmentDate, dataOfSlot, slotsfor18plus, slotsfor40plus };
   } catch (error) {
     console.log("Error: " + error.message);
     return Promise.reject(error);
