@@ -40,9 +40,9 @@ const pingCowin = async ({ districtId, pincode, age, date }) => {
 // }
     if (centers.length) {
       updatedCenters = centers.filter((center) => {
-        console.log("🚀 ~ file: cowin.js ~ line 41 ~ updatedCenters=centers.filter ~ center", center)
         isSlotAvailable = false;
         center.sessions.forEach((session) => {
+          console.log("🚀 ~ file: cowin.js ~ line 41 ~ updatedCenters=centers.filter ~ center", session.slots)
           const sessionDateFormatted = format(parse(session.date, "DD-MM-YYYY"), "MMM D");
           if (
             session.available_capacity > 0

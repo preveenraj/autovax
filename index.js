@@ -89,7 +89,7 @@ const checkForVaccines = async () => {
     return 0;
   }
 };
-const intervalInMs = 60000;
+const intervalInMs = 60000 * 10;
 let pingCount = 0;
 checkForVaccines();
 
