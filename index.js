@@ -92,9 +92,10 @@ const checkForVaccines = async () => {
       if (shouldOpenBrowser) openBrowser();
     } else {
       if (includeTelegram) 
-      sendTelegram(`
-      There are <b>NO</b> slots available!
-      /n`);
+      console.log("NO APPOINMENTS AVAILABLE, BUT DIDNT SEND TO TELEGRAM BECAUSE ITS IGNORED FOR NOW");
+      // sendTelegram(`
+      // There are <b>NO</b> slots available!
+      // /n`);
     }
    }
     return totalAppointmentsAvailable;
