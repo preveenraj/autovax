@@ -53,7 +53,7 @@ const pingCowin = async ({ districtId, pincode, age, dose, date }) => {
             isSlotAvailable = true;
             appointmentsAvailableCount++;
             const personLabel = session.available_capacity > 1 ? "people" : "person";
-            dataOfSlot = `${dataOfSlot}\n<b>${center.name}</b> on <u>${sessionDateFormatted}</u>\n(<b>${session.min_age_limit}</b> years+ )\n<b>Dose[1]</b> for ${session.available_capacity_dose1} people\n<b>Dose[2]</b> for ${session.available_capacity_dose2} people\nAppointments available: ${session.available_capacity} ${personLabel}\n----------------------------------------------------------`;
+            dataOfSlot = `${dataOfSlot}\n<b>${center.name}</b> on <u>${sessionDateFormatted}</u>\n(<b>${session.min_age_limit}</b> years+ )\n__<b>${session.vaccine}</b>__\n<b>Dose[1]</b> for ${session.available_capacity_dose1} people\n<b>Dose[2]</b> for ${session.available_capacity_dose2} people\nAppointments available: ${session.available_capacity} ${personLabel}\n----------------------------------------------------------`;
             if(!nearestAppoinmentDate) {
               nearestAppoinmentDate = transformedDate;
             }
