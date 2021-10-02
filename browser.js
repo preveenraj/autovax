@@ -1,5 +1,6 @@
 const http = require("http"),
   open = require("open");
+  
 let server;
 
 const openBrowser = async () => {
